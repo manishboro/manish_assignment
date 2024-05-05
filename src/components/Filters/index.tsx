@@ -74,9 +74,13 @@ const Filters = () => {
         }}
       />
 
-      <Searchbar label="Location" placeholder="Location" />
+      <Searchbar label="Location" placeholder="Location" handleChange={(value) => dispatch(setFilters({ key: 'location', type: 'search', value }))} />
 
-      <Searchbar label="Company Name" placeholder="Company Name" />
+      <Searchbar
+        label="Company Name"
+        placeholder="Company Name"
+        handleChange={(value) => dispatch(setFilters({ key: 'companyName', type: 'search', value }))}
+      />
     </Box>
   );
 };

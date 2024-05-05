@@ -62,6 +62,8 @@ const applyFilters = (jobs: JD[], filtersApplied: { [key: string]: SelectedFilte
     }
 
     if (currentFilter.type === 'search') {
+      // @ts-ignore
+      _jobs = _jobs.filter((job) => job[filterKey].toLowerCase().includes(currentFilter.value.toLowerCase()));
     }
   });
 

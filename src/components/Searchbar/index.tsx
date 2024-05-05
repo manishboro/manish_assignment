@@ -3,9 +3,10 @@ import { Box, useTheme } from '@mui/material';
 interface SearchbarProps {
   label?: string;
   placeholder?: string;
+  handleChange: (value: string) => void;
 }
 
-const Searchbar = ({ label, placeholder }: SearchbarProps) => {
+const Searchbar = ({ label, placeholder, handleChange }: SearchbarProps) => {
   const theme = useTheme();
 
   return (
@@ -19,6 +20,7 @@ const Searchbar = ({ label, placeholder }: SearchbarProps) => {
       <Box
         component="input"
         placeholder={placeholder}
+        onChange={(e) => handleChange(e.target.value)}
         sx={{
           border: `1px solid ${theme.palette.custom.grey_3}`,
           width: 'max-content',
