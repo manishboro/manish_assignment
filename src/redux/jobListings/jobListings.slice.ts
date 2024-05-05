@@ -27,6 +27,10 @@ export const jobListingsSlice = createSlice({
   name: 'jobListings',
   initialState,
   reducers: {
+    setOffset: (state, data: PayloadAction<number>) => {
+      state.offset = data.payload;
+    },
+
     setIsFetching: (state, data: PayloadAction<boolean>) => {
       state.isFetching = data.payload;
     },
@@ -36,7 +40,7 @@ export const jobListingsSlice = createSlice({
     },
 
     setJobs: (state, data: PayloadAction<JDList>) => {
-      state.jobs = data.payload.jdList;
+      state.jobs = state.jobs?.length ? [...state.jobs, ...data.payload.jdList] : data.payload.jdList;
       state.totalNoOfJobs = data.payload.totalCount;
       state.hasMoreJobs = state.jobs.length < state.totalNoOfJobs ? true : false;
     },
@@ -44,6 +48,6 @@ export const jobListingsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setIsFetching, setIsError, setJobs } = jobListingsSlice.actions;
+export const { setOffset, setIsFetching, setIsError, setJobs } = jobListingsSlice.actions;
 
 export default jobListingsSlice.reducer;

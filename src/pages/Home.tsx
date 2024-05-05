@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Box, CircularProgress, Container } from '@mui/material';
@@ -5,13 +6,14 @@ import { Box, CircularProgress, Container } from '@mui/material';
 import MessageBox from 'components/MessageBox';
 import JobListingCard from 'components/JobListingCard';
 import { useFetch } from 'hooks/useFetch';
+import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
 import { JDList } from 'libs/types/jobDescription';
 import { RootState } from 'redux/store';
-import { setIsError, setIsFetching, setJobs } from 'redux/jobListings/jobListings.slice';
+import { setIsError, setIsFetching, setJobs, setOffset } from 'redux/jobListings/jobListings.slice';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { limit, offset, isFetching, isError, jobs } = useSelector((state: RootState) => state.jobListingsReducer);
+  const { limit, offset, isFetching, isError, jobs, hasMoreJobs } = useSelector((state: RootState) => state.jobListingsReducer);
 
   useFetch<JDList>({
     url: `https://api.weekday.technology/adhoc/getSampleJdJSON`,
@@ -33,6 +35,15 @@ const Home = () => {
     },
   });
 
+  const { targetRef, isIntersecting } = useIntersectionObserver({}, []);
+
+  useEffect(() => {
+    if (isIntersecting && !isFetching) {
+      const nextOffset = offset + limit;
+      dispatch(setOffset(nextOffset));
+    }
+  }, [isIntersecting]);
+
   return (
     <Container maxWidth="lg" sx={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
       {isError ? (
@@ -50,13 +61,13 @@ const Home = () => {
             flexWrap: 'wrap',
           }}
         >
-          {Array.isArray(jobs) ? (
-            jobs.length ? (
-              jobs.map((jd) => <JobListingCard key={jd.jdUid} data={jd} />)
-            ) : (
-              <MessageBox message="No jobs found" />
-            )
-          ) : null}
+          {Array.isArray(jobs) ? jobs.length ? jobs.map((jd) => <JobListingCard key={jd.jdUid} data={jd} />) : <MessageBox message="No jobs found" /> : null}
+        </Box>
+      )}
+
+      {jobs?.length && hasMoreJobs && (
+        <Box ref={targetRef} sx={{ padding: '3rem' }}>
+          <MessageBox message="Fetching more jobs..." />
         </Box>
       )}
     </Container>
