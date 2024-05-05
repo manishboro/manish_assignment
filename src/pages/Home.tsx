@@ -5,6 +5,7 @@ import { Box, CircularProgress, Container } from '@mui/material';
 
 import MessageBox from 'components/MessageBox';
 import JobListingCard from 'components/JobListingCard';
+import Filters from 'components/Filters';
 import { useFetch } from 'hooks/useFetch';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
 import { JDList } from 'libs/types/jobDescription';
@@ -46,6 +47,8 @@ const Home = () => {
 
   return (
     <Container maxWidth="lg" sx={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
+      <Filters />
+
       {isError ? (
         <MessageBox message="Failed to fetch." />
       ) : isFetching && !jobs?.length ? (

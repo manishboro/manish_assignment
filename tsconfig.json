@@ -28,6 +28,7 @@
       "@/libs/*": ["/libs/*"],
       "@/pages/*": ["/pages/*"],
       "@/components/*": ["/components/*"],
+      "@/constants/*": ["/constants/*"],
     }
   },
   "include": ["src"],

@@ -17,3 +17,9 @@ export interface JDList {
   jdList: JD[];
   totalCount: number;
 }
+
+export interface FilterDataItemType {
+  id: string | number;
+  displayText: string;
+  value: string | number;
+}
