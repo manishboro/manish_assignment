@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 
 import Searchbar from 'components/Searchbar';
 import CustomMenu from 'components/CustomMenu';
@@ -13,74 +13,94 @@ const Filters = () => {
   return (
     <Box
       sx={{
-        display: 'flex',
-        gap: '1rem',
-        flexWrap: 'wrap',
-        marginBottom: '4rem',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
+        padding: '1rem 2rem',
+        borderBottom: '1px solid #dcdcdc',
+        position: 'sticky',
+        top: 0,
+        bgcolor: 'white',
+        zIndex: 10,
       }}
     >
-      <CustomMenu
-        id="jobRole"
-        label="Roles"
-        placeholder="Roles"
-        menuItems={rolesData}
-        multiple={true}
-        onMenuItemSelect={({ key, type, multiple, value }) => {
-          dispatch(setFilters({ key, type, multiple, value }));
+      <Container
+        maxWidth="lg"
+        sx={{
+          display: 'flex',
+          gap: '1rem',
+          flexWrap: 'wrap',
+          alignItems: 'flex-end',
+          justifyContent: 'center',
         }}
-      />
+      >
+        <CustomMenu
+          id="jobRole"
+          label="Roles"
+          placeholder="Roles"
+          menuItems={rolesData}
+          multiple={true}
+          moveMenuWithScrolling={false}
+          onMenuItemSelect={({ key, type, multiple, value }) => {
+            dispatch(setFilters({ key, type, multiple, value }));
+          }}
+        />
 
-      <CustomMenu
-        id="minExp"
-        label="Min Experience"
-        placeholder="Min Experience"
-        menuItems={experienceData}
-        onMenuItemSelect={({ key, type, multiple, value }) => {
-          dispatch(setFilters({ key, type, multiple, value }));
-        }}
-      />
+        <CustomMenu
+          id="minExp"
+          label="Min Experience"
+          placeholder="Min Experience"
+          menuItems={experienceData}
+          moveMenuWithScrolling={false}
+          onMenuItemSelect={({ key, type, multiple, value }) => {
+            dispatch(setFilters({ key, type, multiple, value }));
+          }}
+        />
 
-      <CustomMenu
-        id="workplace"
-        label="Workplace"
-        placeholder="Remote"
-        menuItems={workplaceTypeData}
-        multiple={true}
-        onMenuItemSelect={({ key, type, multiple, value }) => {
-          dispatch(setFilters({ key, type, multiple, value }));
-        }}
-      />
+        <CustomMenu
+          id="workplace"
+          label="Workplace"
+          placeholder="Remote"
+          menuItems={workplaceTypeData}
+          multiple={true}
+          moveMenuWithScrolling={false}
+          onMenuItemSelect={({ key, type, multiple, value }) => {
+            dispatch(setFilters({ key, type, multiple, value }));
+          }}
+        />
 
-      <CustomMenu
-        id="techStack"
-        label="Tech Stack"
-        placeholder="Tech Stack"
-        menuItems={techStackData}
-        multiple={true}
-        onMenuItemSelect={({ key, type, multiple, value }) => {
-          dispatch(setFilters({ key, type, multiple, value }));
-        }}
-      />
+        <CustomMenu
+          id="techStack"
+          label="Tech Stack"
+          placeholder="Tech Stack"
+          menuItems={techStackData}
+          multiple={true}
+          moveMenuWithScrolling={false}
+          onMenuItemSelect={({ key, type, multiple, value }) => {
+            dispatch(setFilters({ key, type, multiple, value }));
+          }}
+        />
 
-      <CustomMenu
-        id="minJdSalary"
-        label="Min Base Pay"
-        placeholder="Min Base Pay"
-        menuItems={minBasePayData}
-        onMenuItemSelect={({ key, type, multiple, value }) => {
-          dispatch(setFilters({ key, type, multiple, value }));
-        }}
-      />
+        <CustomMenu
+          id="minJdSalary"
+          label="Min Base Pay"
+          placeholder="Min Base Pay"
+          menuItems={minBasePayData}
+          moveMenuWithScrolling={false}
+          onMenuItemSelect={({ key, type, multiple, value }) => {
+            dispatch(setFilters({ key, type, multiple, value }));
+          }}
+        />
 
-      <Searchbar label="Location" placeholder="Location" handleChange={(value) => dispatch(setFilters({ key: 'location', type: 'search', value }))} />
+        <Searchbar
+          label="Location"
+          placeholder="Location"
+          handleChange={(value) => dispatch(setFilters({ key: 'location', type: 'search', value }))}
+        />
 
-      <Searchbar
-        label="Company Name"
-        placeholder="Company Name"
-        handleChange={(value) => dispatch(setFilters({ key: 'companyName', type: 'search', value }))}
-      />
+        <Searchbar
+          label="Company Name"
+          placeholder="Company Name"
+          handleChange={(value) => dispatch(setFilters({ key: 'companyName', type: 'search', value }))}
+        />
+      </Container>
     </Box>
   );
 };

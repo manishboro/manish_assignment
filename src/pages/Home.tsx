@@ -48,40 +48,42 @@ const Home = () => {
   }, [isIntersecting]);
 
   return (
-    <Container maxWidth="lg" sx={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
+    <>
       <Filters />
 
-      {isError ? (
-        <MessageBox message="Failed to fetch." />
-      ) : isFetching && !_jobs?.length ? (
-        <Box sx={{ margin: 'auto', width: 'max-content' }}>
-          <CircularProgress />
-        </Box>
-      ) : (
-        <Box
-          sx={{
-            gap: '2rem',
-            display: 'flex',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-          }}
-        >
-          {Array.isArray(_jobs) ? (
-            _jobs.length ? (
-              _jobs.map((jd) => <JobListingCard key={jd.jdUid} data={jd} />)
-            ) : (
-              <MessageBox message="No jobs found" />
-            )
-          ) : null}
-        </Box>
-      )}
+      <Container maxWidth="lg" sx={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
+        {isError ? (
+          <MessageBox message="Failed to fetch." />
+        ) : isFetching && !_jobs?.length ? (
+          <Box sx={{ margin: 'auto', width: 'max-content' }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              gap: '2rem',
+              display: 'flex',
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+            }}
+          >
+            {Array.isArray(_jobs) ? (
+              _jobs.length ? (
+                _jobs.map((jd) => <JobListingCard key={jd.jdUid} data={jd} />)
+              ) : (
+                <MessageBox message="No jobs found" />
+              )
+            ) : null}
+          </Box>
+        )}
 
-      {_jobs?.length && hasMoreJobs ? (
-        <Box ref={targetRef} sx={{ padding: '3rem' }}>
-          <MessageBox message="Fetching more jobs..." />
-        </Box>
-      ) : null}
-    </Container>
+        {_jobs?.length && hasMoreJobs ? (
+          <Box ref={targetRef} sx={{ padding: '3rem' }}>
+            <MessageBox message="Fetching more jobs..." />
+          </Box>
+        ) : null}
+      </Container>
+    </>
   );
 };
 

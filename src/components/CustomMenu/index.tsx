@@ -10,6 +10,7 @@ import Chip from 'components/Chip';
 import MessageBox from 'components/MessageBox';
 import useClickOutside from 'hooks/useClickOutside';
 import { FilterDataItemType, FilterKeyType, SelectedFilterType } from 'libs/types/jobDescription';
+import { throttle } from 'libs/throttle';
 
 interface CustomMenuProps {
   id: FilterKeyType;
@@ -17,10 +18,11 @@ interface CustomMenuProps {
   placeholder?: string;
   menuItems?: FilterDataItemType[] | null;
   multiple?: boolean;
+  moveMenuWithScrolling?: boolean;
   onMenuItemSelect?: ({ type, multiple, value }: SelectedFilterType) => void;
 }
 
-const CustomMenu = ({ id, label, placeholder, menuItems, multiple = false, onMenuItemSelect }: CustomMenuProps) => {
+const CustomMenu = ({ id, label, placeholder, menuItems, multiple = false, moveMenuWithScrolling, onMenuItemSelect }: CustomMenuProps) => {
   const theme = useTheme();
 
   const spanRef = useRef<HTMLSpanElement | null>(null);
@@ -48,7 +50,9 @@ const CustomMenu = ({ id, label, placeholder, menuItems, multiple = false, onMen
 
     !multiple && setSelectedValues(null);
 
-    _setMenuItems(menuItems?.filter((menuItem) => !selectedValues?.[menuItem.id] && menuItem.displayText.toLowerCase().includes(value.toLowerCase())));
+    _setMenuItems(
+      menuItems?.filter((menuItem) => !selectedValues?.[menuItem.id] && menuItem.displayText.toLowerCase().includes(value.toLowerCase()))
+    );
   };
 
   // Use to open/close menu
@@ -132,6 +136,18 @@ const CustomMenu = ({ id, label, placeholder, menuItems, multiple = false, onMen
     setContainerWidth(containerRef.current?.clientWidth ?? 0);
     setMenuPosition(containerRef.current?.getBoundingClientRect());
   }, [inputWidth, selectedValues && Object.keys(selectedValues).length]);
+
+  useEffect(() => {
+    const handleResize = throttle(() => {
+      setMenuPosition(containerRef.current?.getBoundingClientRect());
+    }, 100);
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useClickOutside([containerRef, menuRef], () => {
     setOpen(false);
@@ -258,7 +274,7 @@ const CustomMenu = ({ id, label, placeholder, menuItems, multiple = false, onMen
           ref={menuRef}
           sx={{
             zIndex: 9999,
-            position: 'absolute',
+            position: moveMenuWithScrolling ? 'absolute' : 'fixed',
             left: `${menuPosition?.left}px`,
             top: `${(menuPosition?.top ?? 0) + (menuPosition?.height ?? 0)}px`,
             width: containerWidth,
