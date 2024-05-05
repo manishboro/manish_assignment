@@ -1,6 +1,7 @@
 import { Box, CircularProgress, Container } from '@mui/material';
-import MessageBox from 'components/MessageBox';
 
+import MessageBox from 'components/MessageBox';
+import JobListingCard from 'components/JobListingCard';
 import { useFetch } from 'hooks/useFetch';
 import { JDList } from 'libs/types/jobDescription';
 
@@ -32,7 +33,7 @@ const Home = () => {
         >
           {Array.isArray(data?.jdList) ? (
             data.jdList.length ? (
-              data.jdList.map((jd) => <Box key={jd.jdUid}>{jd.companyName}</Box>)
+              data.jdList.map((jd) => <JobListingCard key={jd.jdUid} data={jd} />)
             ) : (
               <MessageBox message="No jobs found" />
             )
