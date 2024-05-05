@@ -10,6 +10,7 @@ export interface JD {
   minJdSalary: number | null;
   salaryCurrencyCode: string | null;
   companyName: string | null;
+  logoUrl?: string;
 }
 
 export interface JDList {

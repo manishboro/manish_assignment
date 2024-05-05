@@ -1,5 +1,7 @@
 import { Box } from '@mui/material';
 
+import ImagePlaceholder from 'assets/image_placeholder.png';
+import Avatar from 'components/Avatar';
 import { JD } from 'libs/types/jobDescription';
 
 interface JobListingCardProps {
@@ -28,6 +30,8 @@ const JobListingCard = ({ data }: JobListingCardProps) => {
     >
       <Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <Avatar size="lg" imageUrl={data?.logoUrl ?? ImagePlaceholder} />
+
           <Box>
             {data.companyName && (
               <Box
