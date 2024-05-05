@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme } from '@mui/material/styles';
 
 // Define a type for your custom palette
 interface CustomPalette {
@@ -15,7 +15,7 @@ interface CustomPalette {
   blue_5: string;
 }
 
-declare module "@mui/material/styles" {
+declare module '@mui/material/styles' {
   interface Palette {
     custom: CustomPalette;
   }
@@ -27,16 +27,16 @@ declare module "@mui/material/styles" {
 // Create a theme instance.
 let theme = createTheme({
   typography: {
-    fontFamily: "Roboto",
+    fontFamily: 'Roboto',
     htmlFontSize: 10,
-    h1: { fontSize: "4.25rem" },
-    h2: { fontSize: "3.25rem" },
-    h3: { fontSize: "2.25rem" },
-    h6: { fontSize: "6.5rem" },
-    body1: { fontSize: "2rem" },
-    body2: { fontSize: "1.8rem" },
-    subtitle1: { fontSize: "1.6rem" },
-    subtitle2: { fontSize: "1.4rem" },
+    h1: { fontSize: '4.25rem' },
+    h2: { fontSize: '3.25rem' },
+    h3: { fontSize: '2.25rem' },
+    h6: { fontSize: '6.5rem' },
+    body1: { fontSize: '2rem' },
+    body2: { fontSize: '1.8rem' },
+    subtitle1: { fontSize: '1.6rem' },
+    subtitle2: { fontSize: '1.4rem' },
   },
   components: {
     MuiCssBaseline: {
@@ -67,19 +67,19 @@ let theme = createTheme({
   },
   palette: {
     custom: {
-      white: "#fff",
-      input_background: "#F4F6FA",
+      white: '#fff',
+      input_background: '#F4F6FA',
 
-      grey_1: "#575757",
-      grey_2: "#707070",
-      grey_3: "#dcdcdc",
-      grey_4: "#f4f6fa",
+      grey_1: '#575757',
+      grey_2: '#979797',
+      grey_3: '#C1C1C1',
+      grey_4: '#E0E0E0',
 
-      blue_1: "#0075FC",
-      blue_2: "#0078d4",
-      blue_3: "#75CFF0",
-      blue_4: "#2196f3",
-      blue_5: "#000FFF",
+      blue_1: '#0075FC',
+      blue_2: '#0078d4',
+      blue_3: '#75CFF0',
+      blue_4: '#2196f3',
+      blue_5: '#000FFF',
     },
   },
 });

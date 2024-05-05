@@ -14,7 +14,7 @@ const Chip = ({ displayText, handleDelete }: ChipProps) => {
         userSelect: 'none',
         padding: '.25rem .5rem',
         color: 'black',
-        bgcolor: 'custom.grey_3',
+        bgcolor: 'custom.grey_4',
         borderRadius: '.5rem',
         display: 'flex',
         alignItems: 'center',

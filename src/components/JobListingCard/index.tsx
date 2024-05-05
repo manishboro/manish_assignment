@@ -145,14 +145,23 @@ const JobListingCard = ({ data, mode = 'default' }: JobListingCardProps) => {
         </Box>
       </Box>
 
-      {typeof data.minExp === 'number' && (
+      {data.minExp || data.maxExp ? (
         <Box>
-          <Box sx={{ typography: 'subtitle2', color: 'custom.grey_2' }}>Minimum Experience</Box>
+          <Box sx={{ typography: 'subtitle2', color: 'custom.grey_2' }}>
+            {data.minExp && data.maxExp ? 'Experience' : data.minExp ? 'Minimum Experience' : data.maxExp ? 'Maximum Experience' : 'Experience'}
+          </Box>
+
           <Box sx={{ typography: 'subtitle1' }}>
-            {data.minExp} {data.minExp === 1 ? 'year' : 'years'}
+            {data.minExp && data.maxExp
+              ? `${data.minExp} - ${data.maxExp} years`
+              : data.minExp
+              ? `${data.minExp} ${data.minExp === 1 ? 'year' : 'years'}`
+              : data.maxExp
+              ? `${data.maxExp} ${data.maxExp === 1 ? 'year' : 'years'}`
+              : null}
           </Box>
         </Box>
-      )}
+      ) : null}
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <CustomButton

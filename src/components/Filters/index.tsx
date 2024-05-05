@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 
 import CustomMenu from 'components/CustomMenu';
+import Searchbar from 'components/Searchbar';
 import { experienceData, minBasePayData, rolesData, techStackData, workplaceTypeData } from 'constants/filterData';
 
 const Filters = () => {
@@ -20,6 +21,8 @@ const Filters = () => {
       <CustomMenu label="Workplace" placeholder="Remote" menuItems={workplaceTypeData} multiple={true} />
       <CustomMenu label="Tech Stack" placeholder="Tech Stack" menuItems={techStackData} multiple={true} />
       <CustomMenu label="Min Base Pay" placeholder="Min Base Pay" menuItems={minBasePayData} />
+      <Searchbar label="Location" placeholder="Location" />
+      <Searchbar label="Company Name" placeholder="Company Name" />
     </Box>
   );
 };
