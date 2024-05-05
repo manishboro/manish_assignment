@@ -153,7 +153,9 @@ const JobListingCard = ({ data, mode = 'default' }: JobListingCardProps) => {
 
           <Box sx={{ typography: 'subtitle1' }}>
             {data.minExp && data.maxExp
-              ? `${data.minExp} - ${data.maxExp} years`
+              ? data.minExp === data.maxExp
+                ? `${data.minExp} ${data.minExp === 1 ? 'year' : 'years'}`
+                : `${data.minExp} - ${data.maxExp} years`
               : data.minExp
               ? `${data.minExp} ${data.minExp === 1 ? 'year' : 'years'}`
               : data.maxExp

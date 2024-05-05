@@ -9,18 +9,18 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Chip from 'components/Chip';
 import MessageBox from 'components/MessageBox';
 import useClickOutside from 'hooks/useClickOutside';
-import { FilterDataItemType } from 'libs/types/jobDescription';
+import { FilterDataItemType, FilterKeyType, SelectedFilterType } from 'libs/types/jobDescription';
 
 interface CustomMenuProps {
+  id: FilterKeyType;
   label?: string;
-  // value?: string | number;
   placeholder?: string;
   menuItems?: FilterDataItemType[] | null;
   multiple?: boolean;
-  onMenuItemSelect?: () => void;
+  onMenuItemSelect?: ({ type, multiple, value }: SelectedFilterType) => void;
 }
 
-const CustomMenu = ({ label, placeholder, menuItems, multiple = false, onMenuItemSelect }: CustomMenuProps) => {
+const CustomMenu = ({ id, label, placeholder, menuItems, multiple = false, onMenuItemSelect }: CustomMenuProps) => {
   const theme = useTheme();
 
   const spanRef = useRef<HTMLSpanElement | null>(null);
@@ -45,55 +45,82 @@ const CustomMenu = ({ label, placeholder, menuItems, multiple = false, onMenuIte
   const handleChange = (value: string) => {
     _setValue(value);
     setOpen(true);
+
     !multiple && setSelectedValues(null);
+
     _setMenuItems(menuItems?.filter((menuItem) => !selectedValues?.[menuItem.id] && menuItem.displayText.toLowerCase().includes(value.toLowerCase())));
   };
 
   // Use to open/close menu
   const handleToggleMenu = () => {
     setIsFocused(true);
+
     setOpen((prev) => !prev);
+
     inputRef.current?.focus();
+
     setMenuPosition(containerRef.current?.getBoundingClientRect());
   };
 
   // Use to select an item from the menu
   const handleMenuItemSelect = (menuItem: FilterDataItemType, multiple: boolean) => {
     _setValue('');
+
     inputRef.current?.focus();
 
     multiple
-      ? setSelectedValues((prev) => (prev ? { ...prev, [menuItem.id]: menuItem } : { [menuItem.id]: menuItem }))
-      : setSelectedValues({ [menuItem.id]: menuItem });
+      ? // Returns an object that contains more than one property
+        setSelectedValues((prev) => {
+          let newValues = prev ? { ...prev, [menuItem.id]: menuItem } : { [menuItem.id]: menuItem };
 
-    _setMenuItems(menuItems?.filter((_menuItem) => _menuItem.id !== menuItem.id && !selectedValues?.[_menuItem.id]));
+          // Can be used to run a custom function. Here, we are using it to dispatch redux actions.
+          onMenuItemSelect?.({ key: id, multiple, type: 'filter', value: Object.values(newValues) });
+
+          // Show only those items that are not selected
+          _setMenuItems(menuItems?.filter((_menuItem) => !newValues?.[_menuItem.id]));
+
+          return newValues;
+        })
+      : // Returns an object that contains only one property
+        setSelectedValues(() => {
+          // Can be used to run a custom function. Here, we are using it to dispatch redux actions.
+          onMenuItemSelect?.({ key: id, multiple, type: 'filter', value: [menuItem] });
+
+          _setMenuItems(menuItems?.filter((_menuItem) => _menuItem.id !== menuItem.id));
+
+          return { [menuItem.id]: menuItem };
+        });
 
     setOpen(false);
-
-    // onMenuItemSelect?.();
   };
 
   // Use to remove selected values
-  const handleChipDelete = (id: string | number) => {
+  const handleChipDelete = (_id: string | number) => {
     const selectedValuesCopy = { ...selectedValues };
 
-    if (selectedValuesCopy.hasOwnProperty(id)) {
+    if (selectedValuesCopy.hasOwnProperty(_id)) {
       _setMenuItems((prev) => {
-        let newMenuItems = prev ? [selectedValuesCopy[id], ...prev] : [selectedValuesCopy[id]];
-        delete selectedValuesCopy[id];
+        let newMenuItems = prev ? [selectedValuesCopy[_id], ...prev] : [selectedValuesCopy[_id]];
+
+        delete selectedValuesCopy[_id];
         setSelectedValues(selectedValuesCopy);
+
+        onMenuItemSelect?.({ key: id, multiple, type: 'filter', value: Object.values(selectedValuesCopy) });
+
         return newMenuItems;
       });
     }
-
-    // onMenuItemSelect?.();
   };
 
   // Use to clear all selected values
   const handleClearSelectedValues = (e: any) => {
     e.stopPropagation();
+
     setSelectedValues(null);
     _setMenuItems(menuItems);
+
+    onMenuItemSelect?.({ key: id, multiple, type: 'filter', value: [] });
+
     inputRef.current?.focus();
   };
 
@@ -156,7 +183,9 @@ const CustomMenu = ({ label, placeholder, menuItems, multiple = false, onMenuIte
                     handleDelete={() => handleChipDelete(selectedValues[key].id)}
                   />
                 ) : (
-                  <Box>{selectedValues[key].displayText}</Box>
+                  <Box sx={{ color: 'black' }} key={selectedValues[key].id}>
+                    {selectedValues[key].displayText}
+                  </Box>
                 )
               )}
             </Box>
@@ -241,7 +270,7 @@ const CustomMenu = ({ label, placeholder, menuItems, multiple = false, onMenuIte
                 {_menuItems?.length ? (
                   _menuItems.map((menuItem) => (
                     <MenuItem
-                      key={menuItem.id}
+                      key={`id-${menuItem.id}`}
                       onClick={() => handleMenuItemSelect(menuItem, multiple)}
                       sx={{ padding: '.5rem 1rem', typography: 'subtitle2', color: 'custom.grey_1' }}
                     >

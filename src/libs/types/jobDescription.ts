@@ -11,6 +11,8 @@ export interface JD {
   salaryCurrencyCode: string | null;
   companyName: string | null;
   logoUrl?: string;
+  workplace?: string;
+  techStack?: string;
 }
 
 export interface JDList {
@@ -22,4 +24,13 @@ export interface FilterDataItemType {
   id: string | number;
   displayText: string;
   value: string | number;
+}
+
+export type FilterKeyType = 'jobRole' | 'minExp' | 'workplace' | 'techStack' | 'minJdSalary' | 'location' | 'companyName';
+
+export interface SelectedFilterType {
+  key: FilterKeyType;
+  type: 'filter' | 'search';
+  multiple?: boolean;
+  value: any;
 }

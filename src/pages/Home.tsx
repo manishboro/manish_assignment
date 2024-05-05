@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Box, CircularProgress, Container } from '@mui/material';
@@ -14,7 +14,9 @@ import { setIsError, setIsFetching, setJobs, setOffset } from 'redux/jobListings
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { limit, offset, isFetching, isError, jobs, hasMoreJobs } = useSelector((state: RootState) => state.jobListingsReducer);
+  const { limit, offset, isFetching, isError, jobs, jobsFiltered, hasMoreJobs } = useSelector((state: RootState) => state.jobListingsReducer);
+
+  const _jobs = useMemo(() => jobsFiltered ?? jobs, [jobs, jobsFiltered]);
 
   useFetch<JDList>({
     url: `https://api.weekday.technology/adhoc/getSampleJdJSON`,
@@ -51,7 +53,7 @@ const Home = () => {
 
       {isError ? (
         <MessageBox message="Failed to fetch." />
-      ) : isFetching && !jobs?.length ? (
+      ) : isFetching && !_jobs?.length ? (
         <Box sx={{ margin: 'auto', width: 'max-content' }}>
           <CircularProgress />
         </Box>
@@ -64,15 +66,21 @@ const Home = () => {
             flexWrap: 'wrap',
           }}
         >
-          {Array.isArray(jobs) ? jobs.length ? jobs.map((jd) => <JobListingCard key={jd.jdUid} data={jd} />) : <MessageBox message="No jobs found" /> : null}
+          {Array.isArray(_jobs) ? (
+            _jobs.length ? (
+              _jobs.map((jd) => <JobListingCard key={jd.jdUid} data={jd} />)
+            ) : (
+              <MessageBox message="No jobs found" />
+            )
+          ) : null}
         </Box>
       )}
 
-      {jobs?.length && hasMoreJobs && (
+      {_jobs?.length && hasMoreJobs ? (
         <Box ref={targetRef} sx={{ padding: '3rem' }}>
           <MessageBox message="Fetching more jobs..." />
         </Box>
-      )}
+      ) : null}
     </Container>
   );
 };
