@@ -2,6 +2,9 @@ import { Box } from '@mui/material';
 
 import ImagePlaceholder from 'assets/image_placeholder.png';
 import Avatar from 'components/Avatar';
+import FaceImage1 from 'assets/face_image_1.webp';
+import FaceImage2 from 'assets/face_image_2.webp';
+import CustomButton from 'components/CustomButton';
 import { JD } from 'libs/types/jobDescription';
 
 interface JobListingCardProps {
@@ -115,6 +118,34 @@ const JobListingCard = ({ data }: JobListingCardProps) => {
           </Box>
         </Box>
       )}
+
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <CustomButton
+          variant="contained"
+          rootStyles={{
+            backgroundColor: 'rgb(85, 239, 196)',
+            '&:hover': { backgroundColor: 'rgb(85, 239, 196)' },
+          }}
+        >
+          ⚡ Easy Apply
+        </CustomButton>
+
+        <CustomButton
+          variant="contained"
+          rootStyles={{
+            color: 'white',
+            backgroundColor: '#4943da',
+
+            '&:hover': { backgroundColor: '#4943da' },
+          }}
+        >
+          <Box sx={{ display: 'flex', gap: '.5rem', marginRight: '1rem' }}>
+            <Avatar size="sm" imageUrl={FaceImage1} rootStyles={{ filter: 'blur(3px)' }} />
+            <Avatar size="sm" imageUrl={FaceImage2} rootStyles={{ filter: 'blur(2px)' }} />
+          </Box>
+          Unlock referral asks
+        </CustomButton>
+      </Box>
     </Box>
   );
 };

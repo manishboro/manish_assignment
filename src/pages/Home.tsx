@@ -9,7 +9,7 @@ const Home = () => {
   const { data, isError, isFetching } = useFetch<JDList>({
     url: `https://api.weekday.technology/adhoc/getSampleJdJSON`,
     method: 'POST',
-    body: { limit: 10, offset: 0 },
+    body: { limit: 9, offset: 0 },
   });
 
   console.log('data', data);
