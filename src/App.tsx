@@ -8,9 +8,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { ThemeProvider } from '@mui/material';
 
-import Home from './pages/Home';
-import theme from './libs/theme';
-import { store } from './redux/store';
+import Home from 'pages/Home';
+import theme from 'libs/theme';
+import { store } from 'redux/store';
 
 function App() {
   return (
