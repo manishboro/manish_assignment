@@ -5,13 +5,32 @@ import Avatar from 'components/Avatar';
 import FaceImage1 from 'assets/face_image_1.webp';
 import FaceImage2 from 'assets/face_image_2.webp';
 import CustomButton from 'components/CustomButton';
+import ModalContentWrapper from 'components/ModalContentWrapper';
 import { JD } from 'libs/types/jobDescription';
+import { useModalContext } from 'libs/context/ModalContext';
 
 interface JobListingCardProps {
   data: JD;
+  mode?: 'default' | 'view';
 }
 
-const JobListingCard = ({ data }: JobListingCardProps) => {
+const JobListingCard = ({ data, mode = 'default' }: JobListingCardProps) => {
+  const modalContext = useModalContext();
+
+  const handleViewJob = ({ data }: { data: JD }) => {
+    modalContext?.handleModalOpen();
+    modalContext?.setComponent(
+      <ModalContentWrapper
+        heading="Job Description"
+        handleModalClose={modalContext.handleModalClose}
+        rootStyles={{ height: '60rem' }}
+        contentStyles={{ padding: 0 }}
+      >
+        <JobListingCard data={data} mode="view" />
+      </ModalContentWrapper>
+    );
+  };
+
   return (
     <Box
       sx={{
@@ -26,9 +45,19 @@ const JobListingCard = ({ data }: JobListingCardProps) => {
         justifyContent: 'space-between',
         transition: 'transform .2s',
 
-        '&:hover': {
-          transform: 'scale(1.025)',
-        },
+        ...(mode === 'view' && {
+          boxShadow: 'none',
+          width: '100%',
+          height: '100%',
+          gap: '2rem',
+          overflow: 'auto',
+        }),
+
+        ...(mode === 'default' && {
+          '&:hover': {
+            transform: 'scale(1.025)',
+          },
+        }),
       }}
     >
       <Box>
@@ -88,25 +117,31 @@ const JobListingCard = ({ data }: JobListingCardProps) => {
               maxHeight: '17rem',
               overflow: 'hidden',
               color: 'custom.grey_1',
-              maskImage: 'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0));',
+
+              ...(mode === 'default' && {
+                maskImage: 'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0));',
+              }),
             }}
           >
             {data.jobDetailsFromCompany}
           </Box>
 
-          <Box
-            sx={{
-              position: 'absolute',
-              bottom: '-1.5rem',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              typography: 'subtitle1',
-              cursor: 'pointer',
-              color: '#4943da',
-            }}
-          >
-            View Job
-          </Box>
+          {mode === 'default' && (
+            <Box
+              sx={{
+                position: 'absolute',
+                bottom: '-1.5rem',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                typography: 'subtitle1',
+                cursor: 'pointer',
+                color: '#4943da',
+              }}
+              onClick={() => handleViewJob({ data })}
+            >
+              View Job
+            </Box>
+          )}
         </Box>
       </Box>
 
