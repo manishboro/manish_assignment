@@ -1,4 +1,5 @@
 import { Box, CircularProgress, Container } from '@mui/material';
+import MessageBox from 'components/MessageBox';
 
 import { useFetch } from 'hooks/useFetch';
 import { JDList } from 'libs/types/jobDescription';
@@ -15,7 +16,7 @@ const Home = () => {
   return (
     <Container maxWidth="lg" sx={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
       {isError ? (
-        <Box>Failed to fetch.</Box>
+        <MessageBox message="Failed to fetch." />
       ) : isFetching && !data?.jdList.length ? (
         <Box sx={{ margin: 'auto', width: 'max-content' }}>
           <CircularProgress />
@@ -33,7 +34,7 @@ const Home = () => {
             data.jdList.length ? (
               data.jdList.map((jd) => <Box key={jd.jdUid}>{jd.companyName}</Box>)
             ) : (
-              <Box>No jobs found</Box>
+              <MessageBox message="No jobs found" />
             )
           ) : null}
         </Box>
