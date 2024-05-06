@@ -20,7 +20,10 @@ const Searchbar = ({ label, placeholder, handleChange }: SearchbarProps) => {
       <Box
         component="input"
         placeholder={placeholder}
-        onChange={(e) => handleChange(e.target.value)}
+        onChange={(e) => {
+          window.scrollTo(0, 0);
+          handleChange(e.target.value);
+        }}
         sx={{
           border: `1px solid ${theme.palette.custom.grey_3}`,
           width: 'max-content',
