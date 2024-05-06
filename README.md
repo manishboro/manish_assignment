@@ -8,5 +8,5 @@
 
 1. Clone the project
 1. Run `npm install`
-1. RUn `npm run dev` to view the application on your local machine
+1. Run `npm run dev` to view the application on your local machine
 
