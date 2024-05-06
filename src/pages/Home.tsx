@@ -41,7 +41,7 @@ const Home = () => {
   const { targetRef, isIntersecting } = useIntersectionObserver({}, []);
 
   useEffect(() => {
-    if (isIntersecting && !isFetching) {
+    if (isIntersecting && !isFetching && hasMoreJobs) {
       const nextOffset = offset + limit;
       dispatch(setOffset(nextOffset));
     }

@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Box, Container } from '@mui/material';
 
@@ -6,9 +6,11 @@ import Searchbar from 'components/Searchbar';
 import CustomMenu from 'components/CustomMenu';
 import { setFilters } from 'redux/jobListings/jobListings.slice';
 import { experienceData, minBasePayData, rolesData, techStackData, workplaceTypeData } from 'constants/filterData';
+import { RootState } from 'redux/store';
 
 const Filters = () => {
   const dispatch = useDispatch();
+  const { filtersApplied } = useSelector((state: RootState) => state.jobListingsReducer);
 
   return (
     <Box
@@ -38,6 +40,7 @@ const Filters = () => {
           menuItems={rolesData}
           multiple={true}
           moveMenuWithScrolling={false}
+          selectedFilterValues={filtersApplied['jobRole']?.value}
           onMenuItemSelect={({ key, type, multiple, value }) => {
             dispatch(setFilters({ key, type, multiple, value }));
           }}
@@ -49,6 +52,7 @@ const Filters = () => {
           placeholder="Min Experience"
           menuItems={experienceData}
           moveMenuWithScrolling={false}
+          selectedFilterValues={filtersApplied['minExp']?.value}
           onMenuItemSelect={({ key, type, multiple, value }) => {
             dispatch(setFilters({ key, type, multiple, value }));
           }}
@@ -61,6 +65,7 @@ const Filters = () => {
           menuItems={workplaceTypeData}
           multiple={true}
           moveMenuWithScrolling={false}
+          selectedFilterValues={filtersApplied['workplace']?.value}
           onMenuItemSelect={({ key, type, multiple, value }) => {
             dispatch(setFilters({ key, type, multiple, value }));
           }}
@@ -73,6 +78,7 @@ const Filters = () => {
           menuItems={techStackData}
           multiple={true}
           moveMenuWithScrolling={false}
+          selectedFilterValues={filtersApplied['techStack']?.value}
           onMenuItemSelect={({ key, type, multiple, value }) => {
             dispatch(setFilters({ key, type, multiple, value }));
           }}
@@ -84,6 +90,7 @@ const Filters = () => {
           placeholder="Min Base Pay"
           menuItems={minBasePayData}
           moveMenuWithScrolling={false}
+          selectedFilterValues={filtersApplied['minJdSalary']?.value}
           onMenuItemSelect={({ key, type, multiple, value }) => {
             dispatch(setFilters({ key, type, multiple, value }));
           }}

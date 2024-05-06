@@ -18,7 +18,7 @@ export interface JobListingsState {
 }
 
 const initialState: JobListingsState = {
-  limit: 9,
+  limit: 50,
   offset: 0,
   jobs: null,
   jobsFiltered: null,

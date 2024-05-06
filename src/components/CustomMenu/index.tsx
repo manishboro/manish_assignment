@@ -19,10 +19,20 @@ interface CustomMenuProps {
   menuItems?: FilterDataItemType[] | null;
   multiple?: boolean;
   moveMenuWithScrolling?: boolean;
+  selectedFilterValues?: FilterDataItemType[];
   onMenuItemSelect?: ({ type, multiple, value }: SelectedFilterType) => void;
 }
 
-const CustomMenu = ({ id, label, placeholder, menuItems, multiple = false, moveMenuWithScrolling, onMenuItemSelect }: CustomMenuProps) => {
+const CustomMenu = ({
+  id,
+  label,
+  placeholder,
+  menuItems,
+  multiple = false,
+  moveMenuWithScrolling,
+  selectedFilterValues,
+  onMenuItemSelect,
+}: CustomMenuProps) => {
   const theme = useTheme();
 
   const spanRef = useRef<HTMLSpanElement | null>(null);
@@ -72,6 +82,8 @@ const CustomMenu = ({ id, label, placeholder, menuItems, multiple = false, moveM
 
     inputRef.current?.focus();
 
+    window.scrollTo(0, 0);
+
     multiple
       ? // Returns an object that contains more than one property
         setSelectedValues((prev) => {
@@ -109,6 +121,8 @@ const CustomMenu = ({ id, label, placeholder, menuItems, multiple = false, moveM
         delete selectedValuesCopy[_id];
         setSelectedValues(selectedValuesCopy);
 
+        window.scrollTo(0, 0);
+
         onMenuItemSelect?.({ key: id, multiple, type: 'filter', value: Object.values(selectedValuesCopy) });
 
         return newMenuItems;
@@ -125,8 +139,40 @@ const CustomMenu = ({ id, label, placeholder, menuItems, multiple = false, moveM
 
     onMenuItemSelect?.({ key: id, multiple, type: 'filter', value: [] });
 
+    window.scrollTo(0, 0);
+
     inputRef.current?.focus();
   };
+
+  // Remove chip when backspace is pressed
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && selectedValues && (e.target as HTMLInputElement).value === '') {
+      const values = Object.values(selectedValues);
+      const deletedValue = values.pop();
+
+      onMenuItemSelect?.({ key: id, multiple, type: 'filter', value: values });
+
+      _setMenuItems((prev) => (deletedValue ? (prev ? [deletedValue, ...prev] : [deletedValue]) : prev));
+
+      setSelectedValues(
+        values.reduce((acc, val) => {
+          acc[val.id] = val;
+          return acc;
+        }, {} as { [key: string | number]: FilterDataItemType })
+      );
+    }
+  };
+
+  // Set selected filter values from redux store if it exists
+  useEffect(() => {
+    selectedFilterValues &&
+      setSelectedValues(
+        selectedFilterValues.reduce((acc, val) => {
+          acc[val.id] = val;
+          return acc;
+        }, {} as { [key: string | number]: FilterDataItemType })
+      );
+  }, []);
 
   useEffect(() => {
     setInputWidth(spanRef.current?.offsetWidth ?? 0);
@@ -233,6 +279,7 @@ const CustomMenu = ({ id, label, placeholder, menuItems, multiple = false, moveM
               ref={inputRef}
               value={_value}
               onChange={(e) => handleChange(e.target.value)}
+              onKeyDown={(e) => handleKeyDown(e)}
               sx={{
                 width: inputWidth,
                 minWidth: '1px',
