@@ -114,11 +114,11 @@ const JobListingCard = ({ data, mode = 'default' }: JobListingCardProps) => {
             sx={{
               marginTop: '1rem',
               typography: 'subtitle2',
-              maxHeight: '17rem',
               overflow: 'hidden',
               color: 'custom.grey_1',
 
               ...(mode === 'default' && {
+                maxHeight: '17rem',
                 maskImage: 'linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0));',
               }),
             }}
